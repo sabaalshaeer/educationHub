@@ -1,4 +1,4 @@
-package eductionhub.dao;
+package educationhub.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

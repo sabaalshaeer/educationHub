@@ -1,0 +1,27 @@
+//create school
+{
+  "schoolName": "Jackson Middle School",
+  "schoolAddress": "123 Brooklyn st",
+  "schoolCity": "Brooklyn area",
+  "schoolState": "MN",
+  "schoolZip": "34562",
+  "schoolPhone": "543-768-5674"
+}
+{
+  "schoolName": "Champlin Park High School",
+  "schoolAddress": "6025 109th Ave N",
+  "schoolCity": "Champlin",
+  "schoolState": "MN",
+  "schoolZip": "55316",
+  "schoolPhone": "(763) 506-6800"
+}
+
+//modify school
+{
+  "schoolName": "Jackson Middle School",
+  "schoolAddress": "345 Brooklyn Blvd",
+  "schoolCity": "Brooklyn Park",
+  "schoolState": "MN",
+  "schoolZip": "34562",
+  "schoolPhone": "543-768-5674"
+}
