@@ -9,6 +9,7 @@ import educationhub.entity.Teacher;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+//Data Transfer Objects (DTOs) to represent and transfer data between the client and server. These DTOs are designed to avoid recursive loops and simplify the JSON representation when converted.
 @Data
 @NoArgsConstructor
 public class TeacherData {
@@ -22,17 +23,18 @@ public class TeacherData {
 	private School school;
 
 	private Set<String> students = new HashSet<>();
-	
-	//we will use this construction to convert obj from JSON to JAVA AND from java class to JSON
 
+	// we will use this construction to convert obj from JSON to JAVA AND from java
+	// class to JSON
+	// this constructor takes Teacher obj as a parameter
 	public TeacherData(Teacher teacher) {
 		teacherId = teacher.getTeacherId();
 		teacher_first_name = teacher.getTeacher_first_name();
 		teacher_last_name = teacher.getTeacher_last_name();
 		email = teacher.getEmail();
 		teacher_subject = teacher.getTeacher_subject();
-		
-		for(Student student : teacher.getStudents()) {
+
+		for (Student student : teacher.getStudents()) {
 			students.add(student.getStudent_first_name());
 		}
 	}
