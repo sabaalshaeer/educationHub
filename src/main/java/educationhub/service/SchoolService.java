@@ -57,7 +57,7 @@ public class SchoolService {
 		return school;
 	}
 
-	private School findSchoolById(Long schoolId) {
+	public School findSchoolById(Long schoolId) {
 		// findById method return optional so to convert from optional to actual type
 		// obj we use orElseThrow
 		// so if optional was empty (school with that Id) then it will throw exception ,
@@ -70,7 +70,7 @@ public class SchoolService {
 	public List<SchoolData> retrieveAllSchools() {
 		//fetch all school objects by calling findAll method in schoolDao
 		List<School> schools = schoolDao.findAll();
-		List<SchoolData> ListOfSchoolData = new LinkedList<>();
+		List<SchoolData> ListOfSchoolsData = new LinkedList<>();
 		
 		for(School school : schools) {
 			SchoolData schoolData = new SchoolData(school);//will convert school obj to schoolData
@@ -78,9 +78,9 @@ public class SchoolService {
 			schoolData.getStudents().clear();//Don't get students associate with
 			
 			//add schoolData to the ListOfSchoolData
-			ListOfSchoolData.add(schoolData);
+			ListOfSchoolsData.add(schoolData);
 		}
-		return ListOfSchoolData;
+		return ListOfSchoolsData;
 	}
 
 	@Transactional(readOnly = true)

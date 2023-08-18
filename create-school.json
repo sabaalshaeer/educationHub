@@ -25,3 +25,23 @@
   "schoolZip": "34562",
   "schoolPhone": "543-768-5674"
 }
+//Add teacher to school
+{
+  "teacher_first_name": "Heather",
+  "teacher_last_name": "West",
+  "email": "heather@icon.org",
+  "teacher_subject": "English" 
+},
+{
+  "teacher_first_name": "Tamara",
+  "teacher_last_name": "Smith",
+  "email": "tamara@icon.org",
+  "teacher_subject": "Math"
+}
+//modify teacher to school
+{
+  "teacher_first_name": "Jane",
+  "teacher_last_name": "West",
+  "email": "Jane.org",
+  "teacher_subject": "English" 
+}
