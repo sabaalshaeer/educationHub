@@ -45,3 +45,10 @@
   "email": "Jane.org",
   "teacher_subject": "English" 
 }
+//Add student to school and teacher
+{
+  "student_first_name": "Rana",
+  "student_last_name": "alshaeer",
+  "age": 15,
+  "grade": 10 
+},

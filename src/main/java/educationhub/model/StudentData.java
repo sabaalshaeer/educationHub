@@ -3,7 +3,6 @@ package educationhub.model;
 import java.util.HashSet;
 import java.util.Set;
 
-import educationhub.entity.School;
 import educationhub.entity.Student;
 import educationhub.entity.Teacher;
 import lombok.Data;
@@ -20,7 +19,7 @@ public class StudentData {
 	private int age;
 	private int grade;
 
-	private School school;
+	private Long schoolId; // Including the schoolId field
 
 	// we change the field type to String instead of Teacher because we need to call
 	// teacher first name which is type String
@@ -35,7 +34,9 @@ public class StudentData {
 		student_last_name = student.getStudent_last_name();
 		age = student.getAge();
 		grade = student.getGrade();
-
+		
+		schoolId = student.getSchool().getSchoolId();
+		
 		for (Teacher teacher : student.getTeachers()) {
 			teachers.add(teacher.getTeacher_first_name());
 		}

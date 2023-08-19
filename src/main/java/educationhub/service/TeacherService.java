@@ -35,9 +35,9 @@ public class TeacherService {
 		// set fields from teacherData to the teacher obj
 		setTeacherFields(teacher, teacherData);
 
-		teacher.setSchool(school);// set school to teacher
+		teacher.setSchool(school);// set school to that teacher
 		school.getTeachers().add(teacher);// add the teacher to the list of teacher that associate with the school
-
+	    
 		return new TeacherData(teacherDao.save(teacher));
 	}
 
@@ -47,6 +47,7 @@ public class TeacherService {
 		teacher.setTeacher_last_name(teacherData.getTeacher_last_name());
 		teacher.setEmail(teacherData.getEmail());
 		teacher.setTeacher_subject(teacherData.getTeacher_subject());
+		
 
 	}
 

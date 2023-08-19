@@ -34,6 +34,7 @@ public class Teacher {
 	private String email;
 	private String teacher_subject;
 
+	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
 	@ManyToOne
 	@JoinColumn(name = "school_id", nullable = false)

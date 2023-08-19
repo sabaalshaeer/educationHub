@@ -22,6 +22,7 @@ public class SchoolData {
 	private String schoolState;
 	private String schoolZip;
 	private String schoolPhone;
+	
 	private Set<TeacherData> teachers = new HashSet<>();
 	private Set<StudentData> students = new HashSet<>();
 
