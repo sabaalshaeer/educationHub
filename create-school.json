@@ -38,10 +38,15 @@
   "teacherEmail": "tamara@icon.org",
   "teacherSubject": "Math"
 }
-"teacherFirstName": "Adam",
+{"teacherFirstName": "Adam",
   "teacherLastName": "Adam",
   "teacherEmail": "tamara@icon.org",
   "teacherSubject": "English"
+  }
+  {"teacherFirstName": "Mark",
+  "teacherLastName": "Anderson",
+  "teacherEmail": "mark.org",
+  "teacherSubject": "Science"
   }
 //modify teacher to school
 {
@@ -63,6 +68,14 @@
   "studentLastName": "Bachachi",
   "age": 10,
   "studentEmail": "laith@icon.com",
+  "grade": 5
+  }
+  
+  {
+"studentFirstName": "Hasan",
+  "studentLastName": "Juaifari",
+  "age": 10,
+  "studentEmail": "juaifari.com",
   "grade": 5
   }
   

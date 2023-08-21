@@ -1,7 +1,6 @@
 package educationhub.controller;
 
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +37,7 @@ public class StudentController {
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public StudentData addStudent(@PathVariable Long schoolId, @PathVariable Long teacherId, @RequestBody StudentData studentData) {
 		log.info("Add student {} to school with id {} and teacher with id {}", studentData, schoolId,teacherId);
-		return studentService.addStudent(schoolId,teacherId,studentData);
+		return studentService.addStudentToSchoolAndTeacher(schoolId,teacherId,studentData);
 	}
 	
 	
@@ -48,17 +47,17 @@ public class StudentController {
 	public StudentData modifyStudent(@PathVariable Long schoolId, @PathVariable Long teacherId,@PathVariable Long studentId, @RequestBody StudentData studentData) {
 		//studentData.setStudentId(studentId);
 		log.info("Modify student {} to school with id {} and teacher with id {}", studentData, schoolId,teacherId);
-		return studentService.addStudent(schoolId,teacherId,studentData);
+		return studentService.addStudentToSchoolAndTeacher(schoolId,teacherId,studentData);
 	}
 	
-	@PutMapping("student/{studentId}/teacher")
+	@PostMapping("teacher/{teacherId}/student")
     @ResponseStatus(HttpStatus.OK)
 	public StudentData updateStudentWithNewTeachers(
-	        @PathVariable Long studentId,
-	        @RequestBody List<String> teacherNames
+	        @PathVariable Long teacherId,
+	        @RequestBody StudentData studentData
 	) {
-	    log.info("Modify student with id {} to associate with different teachers", studentId);
-	    return studentService.updateStudentWithNewTeachers(studentId, teacherNames);
+	    log.info("Add student {} to associate with  teachers with id{}", teacherId);
+	    return studentService.saveStudentWithAssociateTeacher(teacherId, studentData);
 	}
 //	
 //	//Modify student's school and teacher
@@ -77,20 +76,7 @@ public class StudentController {
 		return studentService.retrieveStudentById(studentId);
 	}
 	
-//	//get all students to school with id
-//	@GetMapping("school/{schoolId}/student")
-//	public List<StudentData> retrieveStudentBySchool(@PathVariable Long schoolId) {
-//		log.info("Retrieving student by SchoolId {}", schoolId);
-//		return studentService.retrieveStudentBySchool(schoolId);
-//	}
-//	
-//	//get all students to teacher with id
-//	@GetMapping("teacher/{teacherId}/student")
-//	public List<StudentData> retrieveStudentByTeacher(@PathVariable Long teacherId) {
-//		log.info("Retrieving student by teacherId {}", teacherId);
-//		return studentService.retrieveStudentByTeacher(teacherId);
-//	}
-	
+
 //	//delete student from teacher
 //	@DeleteMapping("teacher/{teacherId}/student/{studentId}")
 //	public Map<String, String> deleteStudentByTeacher(@PathVariable Long teacherId, @PathVariable Long studentId) {
