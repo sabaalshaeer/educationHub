@@ -43,10 +43,10 @@ public class TeacherService {
 
 	private void setTeacherFields(Teacher teacher, TeacherData teacherData) {
 		teacher.setTeacherId(teacherData.getTeacherId());
-		teacher.setTeacher_first_name(teacherData.getTeacher_first_name());
-		teacher.setTeacher_last_name(teacherData.getTeacher_last_name());
-		teacher.setEmail(teacherData.getEmail());
-		teacher.setTeacher_subject(teacherData.getTeacher_subject());
+		teacher.setTeacherFirstName(teacherData.getTeacherFirstName());
+		teacher.setTeacherLastName(teacherData.getTeacherLastName());
+		teacher.setTeacherEmail(teacherData.getTeacherEmail());
+		teacher.setTeacherSubject(teacherData.getTeacherSubject());
 		
 
 	}
@@ -55,18 +55,16 @@ public class TeacherService {
 		// Checking if teacherId is null
 		if (teacherId == null) {
 			// Getting the email from teacherData
-			String email = teacherData.getEmail();
+			String teacherEmail = teacherData.getTeacherEmail();
 
 			// Find existing teacher by email by passing variable email which we get it from teacherData
-			Optional<Teacher> existingTeacher = teacherDao.findTeacherByEmail(email);
+			Optional<Teacher> existingTeacher = teacherDao.findByTeacherEmail(teacherEmail);
 			// Check if an existing teacher with the same email exists
-			if (existingTeacher.isPresent()) {
-				throw new DuplicateKeyException("teacher with Email " + email + "exists");
-
-			} else {
-				// If no matching teacher was found, create a new teacher
+			if(existingTeacher.isPresent()) {
+				throw new DuplicateKeyException("email for this teacher"+ existingTeacher+" already exists");
+			}else {
 				Teacher newTeacher = new Teacher();
-				newTeacher.setEmail(email);// set the email
+				newTeacher.setTeacherEmail(teacherEmail);
 				return newTeacher;
 			}
 		} else {
@@ -116,9 +114,26 @@ public class TeacherService {
 		return new TeacherData(teacher);
 	}
 
+	@Transactional(readOnly = false)
 	public void deleteTeacherByIdWithSchoolId(Long schoolId, Long teacherId) {
 		Teacher teacher = findTeacherById(schoolId, teacherId);
 		teacherDao.delete(teacher);
 	}
 
+	//will use this method in student service
+	 @Transactional(readOnly = true)
+	 public Teacher findTeacherById(Long teacherId) {
+		 return teacherDao.findById(teacherId)
+                .orElseThrow(() -> new NoSuchElementException("Teacher with id" + teacherId + " not found"));
+	    }
+
+	public Teacher findTeacherByFirstNameAndSchool(Long schoolId, String teacherFirstName) {
+		 School school = schoolService.findSchoolById(schoolId); // You need to have a schoolService for this
+	        
+	        if (school != null) {
+	            return teacherDao.findByTeacherFirstNameAndSchool(teacherFirstName, school);
+	        } else {
+	            throw new IllegalArgumentException("School with id" + schoolId + " not found.");
+	        }
+	}
 }

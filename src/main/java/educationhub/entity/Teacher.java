@@ -18,7 +18,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Data // create getters , setters ,toString and HashCode and equals methods for us
+@Data// create getters , setters ,toString and HashCode and equals methods for us
 @NoArgsConstructor // create constructor with out argument, if we dont have this constructor the
 					// Jackson will fail when we try to convert the class into JSON and JSON into
 					// class
@@ -28,11 +28,15 @@ public class Teacher {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long teacherId;
-	private String teacher_first_name;
-	private String teacher_last_name;
+	private String teacherFirstName;
+	private String teacherLastName;
 	@Column(unique = true)//when JPA create table , will create index on email so that will keeps email column as unique 
-	private String email;
-	private String teacher_subject;
+	private String teacherEmail;
+	private String teacherSubject;
+	
+//	public String getTeacherEmail() {
+//        return teacherEmail;
+//    }
 
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude

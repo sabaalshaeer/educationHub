@@ -3,6 +3,7 @@ package educationhub.entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,6 +16,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+
 @Data // create getters , setters ,toString and HashCode and equals methods for us
 @NoArgsConstructor // create constructor with out argument, if we dont have this constructor the
 					// Jackson will fail when we try to convert the class into JSON and JSON into
@@ -25,9 +27,11 @@ public class Student {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long studentId;
-	private String student_first_name;
-	private String student_last_name;
+	private String studentFirstName;
+	private String studentLastName;
 	private int age;
+	@Column(unique = true)
+	private String studentEmail;
 	private int grade;
 
 	@ToString.Exclude

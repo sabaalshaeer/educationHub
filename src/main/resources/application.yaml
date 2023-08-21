@@ -12,6 +12,6 @@ spring:
    
    sql:
       init:
-         mode: always
+         mode: never
          
          # it is our configuration file to create connection with database using spring datasource , create and populate tables using spring jpa and execuse query using spring sql

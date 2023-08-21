@@ -14,9 +14,10 @@ import lombok.NoArgsConstructor;
 public class StudentData {
 
 	private Long studentId;
-	private String student_first_name;
-	private String student_last_name;
+	private String studentFirstName;
+	private String studentLastName;
 	private int age;
+	private String studentEmail;
 	private int grade;
 
 	private Long schoolId; // Including the schoolId field
@@ -30,15 +31,16 @@ public class StudentData {
 	// this constructor takes Student obj as a parameter
 	public StudentData(Student student) {
 		studentId = student.getStudentId();
-		student_first_name = student.getStudent_first_name();
-		student_last_name = student.getStudent_last_name();
+		studentFirstName = student.getStudentFirstName();
+		studentLastName = student.getStudentLastName();
 		age = student.getAge();
+		studentEmail = student.getStudentEmail();
 		grade = student.getGrade();
 		
 		schoolId = student.getSchool().getSchoolId();
 		
 		for (Teacher teacher : student.getTeachers()) {
-			teachers.add(teacher.getTeacher_first_name());
+			teachers.add(teacher.getTeacherFirstName());
 		}
 	}
 }
