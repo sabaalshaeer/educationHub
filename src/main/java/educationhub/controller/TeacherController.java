@@ -26,53 +26,57 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j // it is a Lombok annotation that automatically generates logging code in the
 		// class
 public class TeacherController {
-	
-	//inject service which will handle logic and work as a bridge between Controller and Repository/Dao
-	@Autowired//this annotation will tell spring to manage Bean, Spring will create TeacherService bean , add it to the registry and inject it into the teacherService instance
+
+	// inject service which will handle logic and work as a bridge between
+	// Controller and Repository/Dao
+	@Autowired // this annotation will tell spring to manage Bean, Spring will create
+				// TeacherService bean , add it to the registry and inject it into the
+				// teacherService instance
 	private TeacherService teacherService;
-	
-	//Add new teacher to an exist school with id 
+
+	// Add new teacher to an exist school with id
 	@PostMapping("/school/{schoolId}/teacher")
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public TeacherData addTeacherToSchool(@PathVariable Long schoolId ,@RequestBody TeacherData teacherData) {
+	public TeacherData addTeacherToSchool(@PathVariable Long schoolId, @RequestBody TeacherData teacherData) {
 		log.info("Add Teacher {} to School with id {}", teacherData, schoolId);
 		return teacherService.saveTeacher(schoolId, teacherData);
 	}
-	
-	//get list of teacher to school with id
-	@GetMapping("/school/{schoolId}/teacher")
-	public List<TeacherData> getAllTeachersAssWithSchoolWithId(@PathVariable Long schoolId){
-		return teacherService.getAllTeachersAssWithSchoolWithId(schoolId);
-	}
-	
-	//get teacher by id
-	@GetMapping("/teacher/{teacherId}")
-	public TeacherData getTeacherById(@PathVariable Long teacherId){
-		return teacherService.getTeacherById(teacherId);
-	}
-	
-	//get teacher by id associate with school with id
-	@GetMapping("/school/{schoolId}/teacher/{teacherId}")
-	public TeacherData getTeacherByIdWithSchoolId(@PathVariable Long schoolId ,@PathVariable Long teacherId){
-		return teacherService.getTeacherByIdWithSchoolId(schoolId, teacherId);
-	}
-	
-	//modify new teacher to an exist school with id 
+
+	// modify an exist teacher to an exist school with id
 	@PutMapping("/school/{schoolId}/teacher/{teacherId}")
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public TeacherData ModifyTeacherToSchool(@PathVariable Long schoolId ,@PathVariable Long teacherId ,@RequestBody TeacherData teacherData) {
-		//set teacherId  in the teacherData from the Id which pass in the method
+	public TeacherData ModifyTeacherToSchool(@PathVariable Long schoolId, @PathVariable Long teacherId,
+			@RequestBody TeacherData teacherData) {
+		// set teacherId in the teacherData from the Id which pass in the method
 		teacherData.setTeacherId(teacherId);
 		log.info("Modify Teacher {} to School with id {}", teacherData, schoolId);
 		return teacherService.saveTeacher(schoolId, teacherData);
 	}
-	
-	//delete teacher for specific school
+
+	// get list of teachers to school with id
+	@GetMapping("/school/{schoolId}/teacher")
+	public List<TeacherData> getAllTeachersAssWithSchoolWithId(@PathVariable Long schoolId) {
+		return teacherService.getAllTeachersAssWithSchoolWithId(schoolId);
+	}
+
+	// get teacher by id
+	@GetMapping("/teacher/{teacherId}")
+	public TeacherData getTeacherById(@PathVariable Long teacherId) {
+		return teacherService.getTeacherById(teacherId);
+	}
+
+	// get teacher by id associate with school with id
+	@GetMapping("/school/{schoolId}/teacher/{teacherId}")
+	public TeacherData getTeacherByIdWithSchoolId(@PathVariable Long schoolId, @PathVariable Long teacherId) {
+		return teacherService.getTeacherByIdWithSchoolId(schoolId, teacherId);
+	}
+
+	// delete teacher for specific school
 	@DeleteMapping("/school/{schoolId}/teacher/{teacherId}")
-	public Map<String, String> deleteTeacheForSchoolWithId(@PathVariable Long schoolId,@PathVariable Long teacherId) {
+	public Map<String, String> deleteTeacheForSchoolWithId(@PathVariable Long schoolId, @PathVariable Long teacherId) {
 		log.info("Deleting Teacher with Id{} for school with Id {}", teacherId, schoolId);
 
-		teacherService.deleteTeacherByIdWithSchoolId(schoolId,teacherId);
+		teacherService.deleteTeacherByIdWithSchoolId(schoolId, teacherId);
 
 		return Map.of("message", "Deletion of Teacher with Id=" + teacherId + " was successful.");
 

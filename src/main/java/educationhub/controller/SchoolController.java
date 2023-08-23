@@ -29,7 +29,7 @@ public class SchoolController{
 	@Autowired//this annotation will tell spring to manage Bean, Spring will create SchoolService bean , add it to the registry and inject it into the schoolService instance
 	private SchoolService schoolService;
 	
-	//Add new school
+	//insert school
 	//this method will get a post request to /educationhub/school 
 	@PostMapping("/school")
 	@ResponseStatus(code = HttpStatus.CREATED)

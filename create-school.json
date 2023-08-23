@@ -1,4 +1,4 @@
-//create school
+	//insert school:post request to /educationhub/school with body request
 {
   "schoolName": "Jackson Middle School",
   "schoolAddress": "123 Brooklyn st",
@@ -15,8 +15,15 @@
   "schoolZip": "55316",
   "schoolPhone": "(763) 506-6800"
 }
-
-//modify school
+{
+"schoolName": "Oxbow Elementry School",
+  "schoolAddress": "123 Brooklyn st",
+  "schoolCity": "Brooklyn area",
+  "schoolState": "MN",
+  "schoolZip": "34562",
+  "schoolPhone": "623-654-9346"
+  }
+//modify the school object:putrequest to /educationhub/school/{school with body request
 {
   "schoolName": "Jackson Middle School",
   "schoolAddress": "345 Brooklyn Blvd",
@@ -25,7 +32,14 @@
   "schoolZip": "34562",
   "schoolPhone": "543-768-5674"
 }
-//Add teacher to school
+
+//get a list of school without students and teachers data:get request to /educationhub/school
+//get school By id with students and teachers data:get request to /educationhub/school/{schoolId}
+//delete school by id:delete reuest to /educationalhub/school/{schoolId}
+
+//############################################################
+
+//Add new teacher to an exist school with id:post request to /educationhub/school/{schoolId}/teacher with body request/payload
 {
   "teacherFirstName": "Heather",
   "teacherLastName": "West",
@@ -38,30 +52,42 @@
   "teacherEmail": "tamara@icon.org",
   "teacherSubject": "Math"
 }
-{"teacherFirstName": "Adam",
+{
+"teacherFirstName": "Adam",
   "teacherLastName": "Adam",
   "teacherEmail": "tamara@icon.org",
   "teacherSubject": "English"
   }
-  {"teacherFirstName": "Mark",
+  {
+  "teacherFirstName": "Mark",
   "teacherLastName": "Anderson",
   "teacherEmail": "mark.org",
   "teacherSubject": "Science"
   }
-//modify teacher to school
+	//modify an exist teacher to an exist school with id:put request to /educationhub/school/{schoolId}/teacher/{teacherId} with body request
 {
   "teacherFirstName": "Tamara",
   "teacherLastName": "Smith",
   "teacherEmail": "tamara@icon.org",
   "teacherSubject": "Science"
 }
-//Add student to school and teacher
+
+//get list of teachers to school with id:get request to /educationhub/school/{schoolId}/teacher
+//get teacher by id:get request to /educationhub/teacher/{teacherId}
+//get teacher by id associate with school with id: get requet to /educationhub/school/{schoolId}/teacher/{teacherId}
+// delete teacher for specific school:delete request to /educationhub/school/{schoolId}/teacher/{teacherId}
+
+//############################################################
+
+// Add new student to school with a list of teachers:post request to /educationhub/school/{schoolId}/student with bodyrequest
 {
   "studentFirstName": "Rana",
   "studentLastName": "alshaeer",
   "age": 15,
   "studentEmail": "rana@icon.com",
-  "grade": 10 
+  "grade": 10,
+   "teachers": ["Adam","Heather"]
+   
 },
 {
 "studentFirstName": "Laith",
@@ -69,15 +95,40 @@
   "age": 10,
   "studentEmail": "laith@icon.com",
   "grade": 5
-  }
+  "teachers": ["Tamara","Heather"]
   
+  }
   {
 "studentFirstName": "Hasan",
   "studentLastName": "Juaifari",
   "age": 10,
   "studentEmail": "juaifari.com",
   "grade": 5
+  "teachers": ["Adam","Mark"]
+  
   }
+  //Modify Student info without changing the list of teachers:put request to /educationhub/school/{schoolId}/student/{studentId} with body request
+  {
+  "studentFirstName": "Jude",
+  "studentLastName": "Juaifari",
+  "age": 10,
+  "studentEmail": "juaifari@icon.com",
+  "grade": 5
+  "teachers": ["Adam","Mark"]
+  }
+  // Associate student to other teacher by teacherId:post request to /educationhub/teacher/{teacherId}/student" with payload
+  {
+  "studentFirstName": "Laith",
+  "studentLastName": "Bachachi",
+  "age": 10,
+  "studentEmail": "laith@icon.com",
+  "grade": 5
+ }
+  // delete The relationship between student and teacher:delete request to /educationhub/teacher/{teacherId}/student/{studentId}
+  // delete student by id from the databasedelete request to /educationhub/student/{studentId}
+  //get student info with teachers and school associate with:get request to /educationhub/student/{studentId}
+  
+  
   
   
   

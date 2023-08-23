@@ -33,7 +33,7 @@ public class StudentController {
 				// studentService instance
 	private StudentService studentService;
 
-	// Modify student or Add student to school with a list of teachers
+	// Add new student to school with a list of teachers
 	@PostMapping("/school/{schoolId}/student")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public StudentData insertStudent(@PathVariable Long schoolId, @RequestBody StudentData studentData) {
@@ -41,24 +41,25 @@ public class StudentController {
 		return studentService.saveStudent(schoolId, studentData);
 	}
 
-	// Associate student to teacher by teacherId
+	// Modify Student info without changing the list of teachers
+	@PutMapping("/school/{schoolId}/student/{studentId}")
+	@ResponseStatus(HttpStatus.OK)
+	public StudentData updateStudent(@RequestBody StudentData studentData, @PathVariable Long schoolId,
+			@PathVariable Long studentId) {
+		studentData.setStudentId(studentId);
+		log.info("Modify student{} for school with id with Id{} ", studentData, schoolId);
+
+		return studentService.saveStudent(schoolId, studentData);
+
+	}
+
+	// Associate student to other teacher by teacherId
 	@PostMapping("/teacher/{teacherId}/student")
 	@ResponseStatus(HttpStatus.OK)
 	public StudentData updateStudentWithNewTeachers(@PathVariable Long teacherId,
 			@RequestBody StudentData studentData) {
 		log.info("Add student {} to associate with  teachers with id{}", studentData, teacherId);
 		return studentService.associateStudentWithOtherTeacherTeacher(teacherId, studentData);
-	}
-	
-	//Modify Student
-	@PutMapping("/school/{schoolId}/student/{studentId}")
-	@ResponseStatus(HttpStatus.OK)
-	public StudentData updateStudent(@RequestBody StudentData studentData,@PathVariable Long schoolId, @PathVariable Long studentId) {
-		studentData.setStudentId(studentId);
-		log.info("Modify student{} for school with id with Id{} ",studentData,schoolId);
-
-		return studentService.saveStudent(schoolId, studentData);
-		
 	}
 
 	// delete The relationship between student and teacher
@@ -87,12 +88,5 @@ public class StudentController {
 		return studentService.retrieveStudentById(studentId);
 	}
 
-//	// Add a student to an existing school and teacher
-//	@PostMapping("/school/{schoolId}/teacher/{teacherId}/student")
-//	@ResponseStatus(code = HttpStatus.CREATED)
-//	public StudentData addStudent(@PathVariable Long schoolId, @PathVariable Long teacherId,
-//			@RequestBody StudentData studentData) {
-//		log.info("Add student {} to school with id {} and teacher with id {}", studentData, schoolId, teacherId);
-//		return studentService.addStudentToSchoolAndTeacher(schoolId, teacherId, studentData);
-//	}
+
 }

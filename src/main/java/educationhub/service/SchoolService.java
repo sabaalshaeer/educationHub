@@ -19,6 +19,7 @@ public class SchoolService {
 	@Autowired
 	private SchoolDao schoolDao;
 
+	//insert or modify school method
 	@Transactional(readOnly = false)
 	public SchoolData saveSchool(SchoolData schoolData) {
 		// get the school id if it is exists
