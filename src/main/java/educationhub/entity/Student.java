@@ -3,12 +3,14 @@ package educationhub.entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
@@ -34,18 +36,28 @@ public class Student {
 	private String studentEmail;
 	private int grade;
 
+
+	@JoinColumn(name = "school_id", nullable = false)
 	@ToString.Exclude
 	@ManyToOne
-	@JoinColumn(name = "school_id", nullable = false)
 	private School school;
 
 	/*
 	 * Many students can be associated with one school.
 	 */
 
+
+//	@ManyToMany(mappedBy = "students",cascade = CascadeType.PERSIST)
+//	@EqualsAndHashCode.Exclude
+//	@ToString.Exclude
+//	private Set<Teacher> teachers = new HashSet<>();
+	
+	
+	//FK and Create the join table
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
-	@ManyToMany(mappedBy = "students")
+	@ManyToMany
+	@JoinTable(name = "teacher_student", joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "teacher_id"))
 	private Set<Teacher> teachers = new HashSet<>();
 
 }

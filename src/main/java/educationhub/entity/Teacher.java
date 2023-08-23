@@ -48,8 +48,14 @@ public class Teacher {
 	 * Many teachers can be associated with one school.
 	 */
 
-	@ManyToMany(cascade = CascadeType.PERSIST)
-	@JoinTable(name = "teacher_student", joinColumns = @JoinColumn(name = "teacher_id"), inverseJoinColumns = @JoinColumn(name = "student_id"))
+//	@ManyToMany(cascade = CascadeType.PERSIST)
+//	@JoinTable(name = "teacher_student", joinColumns = @JoinColumn(name = "teacher_id"), inverseJoinColumns = @JoinColumn(name = "student_id"))
+//	@EqualsAndHashCode.Exclude
+//	@ToString.Exclude
+//	private Set<Student> students = new HashSet<>();
+	
+	
+	@ManyToMany(mappedBy = "teachers")
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
 	private Set<Student> students = new HashSet<>();

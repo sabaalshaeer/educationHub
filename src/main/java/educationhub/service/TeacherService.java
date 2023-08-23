@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import educationhub.dao.TeacherDao;
 import educationhub.entity.School;
+import educationhub.entity.Student;
 import educationhub.entity.Teacher;
 import educationhub.model.TeacherData;
 
@@ -20,6 +21,9 @@ public class TeacherService {
 
 	@Autowired
 	private TeacherDao teacherDao;
+	
+//	@Autowired
+//	StudentDao studentDao;
 
 	@Autowired
 	private SchoolService schoolService;// inject this service because I need to call methods in this service
@@ -117,7 +121,20 @@ public class TeacherService {
 	@Transactional(readOnly = false)
 	public void deleteTeacherByIdWithSchoolId(Long schoolId, Long teacherId) {
 		Teacher teacher = findTeacherById(schoolId, teacherId);
-		teacherDao.delete(teacher);
+
+		if(teacher.getSchool().getSchoolId() != schoolId) {
+			throw new IllegalArgumentException("school with id "+teacherId+" does not associate with this teacher");
+		}
+		// Remove the association between teacher and students
+	    for (Student student : teacher.getStudents()) {
+	        student.getTeachers().remove(teacher);
+	    }
+	    
+	    // Clear the association on the teacher's side as well
+	    teacher.getStudents().clear();
+
+	    // Now you can safely delete the teacher
+	    teacherDao.delete(teacher);
 	}
 
 	//will use this method in student service

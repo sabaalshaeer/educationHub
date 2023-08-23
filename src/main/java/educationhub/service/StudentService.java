@@ -1,7 +1,9 @@
 package educationhub.service;
 
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -17,13 +19,13 @@ import educationhub.model.StudentData;
 
 @Service
 public class StudentService {
-	
+
 	@Autowired
 	private StudentDao studentDao;
-	
+
 	@Autowired
 	private TeacherDao teacherDao;
-	
+
 	@Autowired
 	private SchoolService schoolService;// inject this school service because I need to call methods in this service
 
@@ -31,21 +33,47 @@ public class StudentService {
 	private TeacherService teacherService;// inject this teacher service because I need to call methods in this service
 
 	@Transactional(readOnly = false)
-	public StudentData addStudentToSchoolAndTeacher(Long schoolId, Long teacherId, StudentData studentData) {
-		Teacher teacher = teacherService.findTeacherById(schoolId, teacherId);
-	    School school =  schoolService.findSchoolById(schoolId);
-	    Long studentId = studentData.getStudentId();
-	    Student student = findOrCreateStudent(schoolId,studentId,teacherId,studentData);
-	    
-	    setStudentFields(student, studentData);
-	    
-	    // Associate the student with the school and teacher
-        student.setSchool(school);
-        student.getTeachers().add(teacher); //Add teacher to Student's list of teacher
-        teacher.getStudents().add(student); // Add student to teacher's list of students
+	public StudentData saveStudent(Long schoolId, StudentData studentData) {
+		School school = schoolService.findSchoolById(schoolId);
+		Set<Teacher> teachers = teacherDao.findAllByTeacherFirstNameIn(studentData.getTeachers());
+		Student student = findOrCreateNewStudent(studentData.getStudentId(), studentData);
+		setStudentFields(student, studentData);
+		
+		student.setSchool(school);
+		school.getStudents().add(student);
+		
+		for(Teacher teacher: teachers) {
+			if(student.getSchool().getSchoolId().equals(teacher.getSchool().getSchoolId())){
+				teacher.getStudents().add(student);
+				student.getTeachers().add(teacher);
+			}else {
+				throw new IllegalArgumentException("Teacher does not associate with the same school that student associate with");
+			}
+			
+		}
+		
+		Student dbStudent =studentDao.save(student);
+		return new StudentData(dbStudent);
 
-        return new StudentData(studentDao.save(student));
-	    
+	}
+
+	private Student findOrCreateNewStudent(Long studentId, StudentData studentData) {
+		if(Objects.isNull(studentId)) {
+			String studentEmail = studentData.getStudentEmail();// get email from studentData payload
+
+			Optional<Student> existingStudent = studentDao.findByStudentEmail(studentEmail);
+
+			if (existingStudent.isPresent()) {
+				System.out.println("Student" + existingStudent + " already exists");
+				throw new DuplicateKeyException("email for this student" + existingStudent + " already exists");
+			} else {
+				Student newStudent = new Student();
+				newStudent.setStudentEmail(studentEmail);
+				return newStudent;
+			}
+		}else {
+			return findStudentById(studentId);
+		}
 	}
 
 	private void setStudentFields(Student student, StudentData studentData) {
@@ -55,102 +83,161 @@ public class StudentService {
 		student.setStudentEmail(studentData.getStudentEmail());
 		student.setGrade(studentData.getGrade());
 	}
-	
-
-	private Student findOrCreateStudent(Long schoolId, Long studentId,Long teacherId,StudentData studentData) {
-		if(studentId == null) {
-			String studentEmail = studentData.getStudentEmail();//get email from studentData payload
-			
-			Optional<Student> existingStudent = studentDao.findByStudentEmail(studentEmail);
-			
-			if(existingStudent.isPresent()) {
-				System.out.println("Student"+ existingStudent+" already exists");
-				throw new DuplicateKeyException("email for this student"+ existingStudent+" already exists");
-			}else {
-				Student newStudent = new Student();
-				newStudent.setStudentEmail(studentEmail);
-			 	return newStudent;
-			}
-			
-		}else {
-			return findStudentById(studentId, teacherId);
-		}
-	}
 
 
-
-	private Student findStudentById(Long studentId, Long teacherId) {
-		Student student = studentDao.findById(studentId).orElseThrow(() -> new NoSuchElementException("Student with id" + studentId+ "was not found"));
-		Teacher teacher = teacherDao.findById(teacherId).orElseThrow(() -> new NoSuchElementException("teacher with id" + teacherId+ "was not found"));
-		
-		if(student.getSchool().getSchoolId().equals(teacher.getSchool().getSchoolId())) {
-			for(Teacher singleTteacher : student.getTeachers()) {
-				if(singleTteacher.getTeacherId().equals(teacherId)) {
-					throw new IllegalArgumentException("student with id"+studentId+" not associate with teacher with id "+teacherId);
-				}
-			}
-			return student;
-		}else {
-			throw new IllegalArgumentException("Student with id"+studentId+" not associated with the teacher has the same schoolId ");
-		}
-	}
 
 	@Transactional(readOnly = false)
-	public StudentData saveStudentWithAssociateTeacher(Long teacherId, StudentData studentData) {
+	public StudentData associateStudentWithOtherTeacherTeacher(Long teacherId, StudentData studentData) {
+		// Retrieve the teacher using the provided teacherId
 		Teacher teacher = teacherService.findTeacherById(teacherId);
-				
-//		 String studentEmail = studentData.getStudentEmail();
-		 
-		 Long studentId = studentData.getStudentId();
+		// get student's email to check if it exists
+		String studentEmail = studentData.getStudentEmail();
 
-		    
-//	    // Check if a student with the same email already exists
-//		Student student = studentDao.findByStudentEmail(studentEmail).orElseGet(() -> createNewStudent(studentData));
+		// Check if a student with the same email already exists find it or create new
+		// one
+		Student student = studentDao.findByStudentEmail(studentEmail).orElseGet(() -> createNewStudent(studentData));
 
-		 // Check if a student with the same ID already exists
-	    Student student = studentDao.findById(studentId).orElseGet(() -> createNewStudent(studentData));
-	    
-	    
-	    // Associate the student with the new teacher
+		// Check if the student and teacher belong to the same school
+		if (!student.getSchool().equals(teacher.getSchool())) {
+			throw new IllegalArgumentException("Student and teacher are not associated with the same school.");
+		}
+
+		// Associate the student with the new teacher
 		student.getTeachers().add(teacher);
 		teacher.getStudents().add(student);
-		
-		setStudentFields(student, studentData); //set the fields from petStoreCustomer to the existing customer
 
-		
+		setStudentFields(student, studentData);// Set the student's fields from the provided studentData
+		// Save the updated student and return its data
+
 		return new StudentData(studentDao.save(student));
-		
+
 	}
-	
-	//create new student if student's email exists then retrieve the existing student and associate student with new teacher
+
+	// create new student if student with given email does not exist
 	private Student createNewStudent(StudentData studentData) {
 		Student newStudent = new Student();
-	    newStudent.setStudentEmail(studentData.getStudentEmail());
-	    newStudent.setStudentFirstName(studentData.getStudentFirstName());
-	    newStudent.setStudentLastName(studentData.getStudentLastName());
-	    newStudent.setAge(studentData.getAge());
-	    newStudent.setGrade(studentData.getGrade());
-	    return newStudent;
+		newStudent.setStudentEmail(studentData.getStudentEmail());
+		newStudent.setStudentFirstName(studentData.getStudentFirstName());
+		newStudent.setStudentLastName(studentData.getStudentLastName());
+		newStudent.setAge(studentData.getAge());
+		newStudent.setGrade(studentData.getGrade());
+
+		return newStudent;
 	}
 
 	@Transactional(readOnly = true)
 	public StudentData retrieveStudentById(Long studentId) {
-		Student student = studentDao.findById(studentId).orElseThrow(() -> new NoSuchElementException("Student with id" + studentId+ "was not found"));
+		Student student = studentDao.findById(studentId)
+				.orElseThrow(() -> new NoSuchElementException("Student with id" + studentId + "was not found"));
 		return new StudentData(student);
 	}
 
 	@Transactional(readOnly = false)
 	public void deleteStudentById(Long studentId) {
 		Student student = findStudentById(studentId);
-		studentDao.delete(student);
 		
+		// Remove the association between teacher and students
+	    for (Teacher teacher : student.getTeachers()) {
+	        teacher.getStudents().remove(student);
+	    }
+	    
+	    // Clear the association on the student side as well
+	    student.getTeachers().clear();
+
+	    // delete the student
+		studentDao.delete(student);
+
 	}
-	
+
 	private Student findStudentById(Long studentId) {
-		Student student = studentDao.findById(studentId).orElseThrow(() -> new NoSuchElementException("Student with id" + studentId+ "was not found"));
+		Student student = studentDao.findById(studentId)
+				.orElseThrow(() -> new NoSuchElementException("Student with id" + studentId + "was not found"));
 		return student;
 	}
 
+	@Transactional(readOnly = false)
+	public void deleteRealtionshipBetweenStudentAndTeacher(Long teacherId, Long studentId) {
+		Student student = findStudentById(studentId);
+		Teacher teacher = teacherService.findTeacherById(teacherId);
+
+		if(student.getSchool().getSchoolId().equals(teacher.getSchool().getSchoolId())) {
+			// Remove the student-teacher relationship from the join table
+			student.getTeachers().remove(teacher);// Remove the teacher from the student's teacher list
+			teacher.getStudents().remove(student);// Remove the student from the teacher's student list
+
+			// Save the updated teacher and student entities
+			teacherDao.save(teacher);
+			studentDao.save(student);
+		}else {
+			throw new IllegalArgumentException("Teacher with id "+teacherId+" does not associate to the same school for the student with id "+studentId);
+		}
+		
+	}
 
 	
+	
+//	@Transactional(readOnly = false)
+//	public StudentData addStudentToSchoolAndTeacher(Long schoolId, Long teacherId, StudentData studentData) {
+//		Teacher teacher = teacherService.findTeacherById(schoolId, teacherId);// find teacher associate to this schoolId
+//		School school = schoolService.findSchoolById(schoolId);
+//		Long studentId = studentData.getStudentId();
+//		Student student = findOrCreateStudent(schoolId, studentId, teacherId, studentData);
+//
+//		setStudentFields(student, studentData);
+//
+//		// Associate the student with the school and teacher
+//		student.setSchool(school);
+//		student.getTeachers().add(teacher); // Add teacher to Student's list of teacher
+//		teacher.getStudents().add(student); // Add student to teacher's list of students
+//
+//		return new StudentData(studentDao.save(student));
+//
+//	}
+	
+//	private Student findOrCreateStudent(Long schoolId, Long studentId, Long teacherId, StudentData studentData) {
+//	if (studentId == null) {
+//		String studentEmail = studentData.getStudentEmail();// get email from studentData payload
+//
+//		Optional<Student> existingStudent = studentDao.findByStudentEmail(studentEmail);
+//
+//		if (existingStudent.isPresent()) {
+//			System.out.println("Student" + existingStudent + " already exists");
+//			throw new DuplicateKeyException("email for this student" + existingStudent + " already exists");
+//		} else {
+//			Student newStudent = new Student();
+//			newStudent.setStudentEmail(studentEmail);
+//			return newStudent;
+//		}
+//
+//	} else {
+//		return findStudentById(studentId, teacherId);
+//	}
+//}
+
+//private Student findStudentById(Long studentId, Long teacherId) {
+//	// Find the student with the given ID.
+//	Student student = studentDao.findById(studentId)
+//			.orElseThrow(() -> new NoSuchElementException("Student with id" + studentId + "was not found"));
+//	// Find the teacher with the given ID.
+//	Teacher teacher = teacherDao.findById(teacherId)
+//			.orElseThrow(() -> new NoSuchElementException("teacher with id" + teacherId + "was not found"));
+//
+//	// Check if the student and the teacher are from the same school.
+//	if (student.getSchool().getSchoolId().equals(teacher.getSchool().getSchoolId())) {
+//		// Check if the teacher is one of the students' teachers.
+//		for (Teacher singleTteacher : student.getTeachers()) {
+//
+//			if (singleTteacher.getTeacherId().equals(teacherId)) {
+//				return student;
+//
+//			}
+//		}
+//		throw new IllegalArgumentException(
+//				"student with id" + studentId + " associate with teacher with id " + teacherId);
+//	} else {
+//		throw new IllegalArgumentException(
+//				"Student with id" + studentId + " not associated with the teacher has the same schoolId ");
+//	}
+//}
+
 }

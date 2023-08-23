@@ -15,6 +15,4 @@ public interface StudentDao extends JpaRepository<Student, Long> {
 
 	
 
-	
-
 }
