@@ -46,4 +46,39 @@ public class SchoolData {
 			students.add(new StudentData(student));
 		}
 	}
+	
+	//Use constructor in the test level
+		//constructor takes school variables to use it in the test to create school
+		public SchoolData(
+				Long schoolId, 
+				String schoolName, 
+				String schoolAddress, 
+				String schoolCity,
+				String schoolState,
+				String schoolZip,
+				String schoolPhone) {
+			this.schoolId = schoolId;
+			this.schoolName = schoolName;
+			this.schoolAddress = schoolAddress;
+			this.schoolCity = schoolCity;
+			this.schoolState = schoolState;
+			this.schoolZip = schoolZip;
+			this.schoolPhone = schoolPhone;
+
+		}
+
+		// for test convert school object back to the schoolData object
+		public School toSchool() {
+			School school = new School();
+			// set Fields
+			school.setSchoolId(schoolId);
+			school.setSchoolName(schoolName);
+			school.setSchoolAddress(schoolAddress);
+			school.setSchoolCity(schoolCity);
+			school.setSchoolState(schoolState);
+			school.setSchoolZip(schoolZip);
+			school.setSchoolPhone(schoolPhone);
+
+			return school;
+		}
 }
