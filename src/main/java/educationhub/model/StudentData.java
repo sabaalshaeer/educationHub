@@ -5,6 +5,7 @@ import java.util.Set;
 
 import educationhub.entity.Student;
 import educationhub.entity.Teacher;
+import jakarta.persistence.Column;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,10 +14,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class StudentData {
 
+	@Column(name = "student_id")
 	private Long studentId;
+	@Column(name = "student_first_name")
 	private String studentFirstName;
+	@Column(name = "student_last_name")
 	private String studentLastName;
 	private int age;
+	@Column(name = "student_email")
 	private String studentEmail;
 	private int grade;
 

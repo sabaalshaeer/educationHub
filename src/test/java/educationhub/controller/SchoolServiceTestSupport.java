@@ -18,12 +18,12 @@ public class SchoolServiceTestSupport {
 	private static final String TEACHER_STUDENT_TABLE = "teacher_student";
 
 	private static final String INSERT_TEACHER_1_SQL = """
-			INSERT INTO teacher (teacherFirstName, teacherLastName, teacherEmail, teacherSubject, school_id)
+			INSERT INTO teacher (teacher_first_name, teacher_last_name, teacher_email, teacher_subject, school_id)
 			VALUES
 			('Heather', 'West', 'heather@icon.org', 'English', 1)
 							""";
 	private static final String INSERT_TEACHER_2_SQL = """
-			INSERT INTO teacher (teacherFirstName, teacherLastName, teacherEmail, teacherSubject, school_id)
+			INSERT INTO teacher (teacher_first_name, teacher_last_name, teacher_email, teacher_subject, school_id)
 			VALUES
 			('Mark', 'Anderson', 'mark@icon.org', 'Science', 1)
 						""";

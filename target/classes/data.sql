@@ -1,10 +1,10 @@
-INSERT INTO student (studentFirstName, studentLastName, age, studentEmail, grade, school_id)
-VALUES('Rana', 'alshaeer', 15, 'rana@icon.com', 10, 1);
-INSERT INTO student (studentFirstName, studentLastName, age, studentEmail, grade, school_id)
-VALUES('Laith', 'Bachachi', 15, 'laith@icon.com', 10, 1);
-INSERT INTO student (studentFirstName, studentLastName, age, studentEmail, grade, school_id)
-VALUES('Hasan', 'Juaifari', 16, 'hasanfari@icon.com', 11, 1);
-INSERT INTO student (studentFirstName, studentLastName, age, studentEmail, grade, school_id)
-VALUES('Hayder', 'Juaifari', 16, 'hjuaifari@icon.com', 11, 1);
+INSERT INTO student (student_first_name, student_last_name, age, student_email, grade)
+VALUES('Rana', 'alshaeer', 15, 'rana@icon.com', 10);
+INSERT INTO student (student_first_name, student_last_name, age, student_email, grade)
+VALUES('Laith', 'Bachachi', 15, 'laith@icon.com', 10);
+INSERT INTO student (student_first_name, student_last_name, age, student_email, grade)
+VALUES('Hasan', 'Juaifari', 16, 'hasanfari@icon.com', 11);
+INSERT INTO student (student_first_name, student_last_name, age, student_email, grade)
+VALUES('Hayder', 'Juaifari', 16, 'hjuaifari@icon.com', 11);
   
  

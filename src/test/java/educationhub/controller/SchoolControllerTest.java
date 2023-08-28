@@ -120,44 +120,6 @@ class SchoolControllerTest extends SchoolServiceTestSupport{
 	}
 
 	
-
-	
-//	@Test
-//	void testinsertTeacher() {
-//		//Given: A teacher request (this what we will build)
-//		TeacherData request = buildInsertTeacher(1);
-//		TeacherData expected = buildInsertTeacher(1);
-//		
-//		//When: the teacher is added to the Teacher table(that's what actually inserting into the table)
-//		TeacherData actual = insertTeacher(request);
-//		
-//		//then :the teacher returned is what is expected
-//		assertThat(actual).isEqualTo(expected);
-//
-//		//And there is one row in the teacher table
-//		assertThat(rowsInTeacherTable()).isOne();
-//
-//	}
-//
-//	@Test 
-//	void testUpdateTeacher(){
-//		//Given: a teacher and an update request
-//		insertTeacher(buildInsertTeacher(1));
-//		TeacherData expected = buildUpdateTeacher();
-//		
-//		//when: the teacher is updated
-//		TeacherData actual = updateTeacher(expected);
-//		
-//		//Then: the teacher is returned as expected
-//		assertThat(actual).isEqualTo(expected);
-//
-//		//And : there is  one row in the teacher table
-//		assertThat(rowsInTeacherTable()).isOne();
-//
-//	}
-
-	
-
 	
 
 }
