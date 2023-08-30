@@ -19,7 +19,7 @@ Getting Started
 
 Prerequisites: Ensure you have Java, Maven, and MySQL installed on your system.
 
-Clone the Repository: Clone this repository to your local machine using git clone https://github.com/yourusername/EducationHub.git.
+Clone the Repository: Clone this repository to your local machine using git clone https://github.com/sabaalshaeer/EducationHub.git.
 
 Database Setup: Create a MySQL database and update the database connection details in the application.yml configuration file.
 
